@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from users.models import Role, ApiUser
+from users.models import Tier, ApiUser
 
 
 class ApiUserTest(TestCase):
@@ -10,7 +10,7 @@ class ApiUserTest(TestCase):
         thumbnail_sizes = [200]
 
         user = User.objects.create(username='username', password='password')
-        role = Role.objects.create(name='role', thumbnail_sizes=thumbnail_sizes, can_get_original=True)
+        role = Tier.objects.create(name='role', thumbnail_sizes=thumbnail_sizes, can_get_original=True)
         ApiUser.objects.create(user=user, role=role)
 
-        self.assertEqual(ApiUser.objects.first().role.thumbnail_sizes, f'{thumbnail_sizes}')
+        self.assertEqual(ApiUser.objects.first().tier.thumbnail_sizes, f'{thumbnail_sizes}')
