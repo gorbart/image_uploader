@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.utils import timezone
 
@@ -5,9 +7,8 @@ from users.models import ApiUser
 
 
 def upload_to(instance, filename):
-    return '{user_id}/{year}/{month}/{day}/{filename}'.format(user_id=instance.owner_id, year=instance.upload_date.year,
-                                                              month=instance.upload_date.month,
-                                                              day=instance.upload_date.day, filename=filename)
+    return os.path.join(str(instance.owner_id), str(instance.upload_date.year), str(instance.upload_date.month),
+                        str(instance.upload_date.day), filename)
 
 
 class Image(models.Model):
