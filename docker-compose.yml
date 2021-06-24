@@ -14,10 +14,14 @@ services:
       TZ: Europe/Warsaw
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py loaddata tiers.json && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/image_uploader
     ports:
       - "8000:8000"
-    depends_on:
-      - db
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 60s

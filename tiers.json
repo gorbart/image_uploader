@@ -1,0 +1,32 @@
+[
+  {
+    "pk": 1,
+    "model": "users.tier",
+    "fields": {
+      "name": "Basic",
+      "thumbnail_sizes": "[200]",
+      "can_get_original": "False",
+      "can_generate_expiring_links": "False"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "users.tier",
+    "fields": {
+      "name": "Premium",
+      "thumbnail_sizes": "[200, 400]",
+      "can_get_original": "True",
+      "can_generate_expiring_links": "False"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "users.tier",
+    "fields": {
+      "name": "Enterprise",
+      "thumbnail_sizes": "[200, 400]",
+      "can_get_original": "True",
+      "can_generate_expiring_links": "True"
+    }
+  }
+]
