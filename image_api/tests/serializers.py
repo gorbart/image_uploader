@@ -9,9 +9,11 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from image_api.serializers import ImageSerializer
-from image_handler.models import Image
+from image_handler import models
 from image_uploader.settings import BASE_DIR
 from users.models import Tier, ApiUser
+
+from PIL import Image
 
 
 class TestImageSerializer(SimpleTestCase):
@@ -24,10 +26,10 @@ class TestImageSerializer(SimpleTestCase):
         tier = Tier(name='tier', thumbnail_sizes=thumbnail_sizes, can_get_original=True)
         apiuser = ApiUser(user=user, tier=tier)
 
-        with open(os.path.join(BASE_DIR, 'media', 'test', 'python.png')) as f:
+        with Image.open(os.path.join(BASE_DIR, 'media', 'test', 'python.png')) as f:
             image_from_disk = File(f)
 
-        image = Image(name='Python', image=image_from_disk, owner=apiuser)
+        image = models.Image(name='Python', image=image_from_disk, owner=apiuser)
 
         pre_serializer = ImageSerializer(data=image)
         pre_serializer.is_valid()

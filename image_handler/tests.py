@@ -18,7 +18,7 @@ class TestImage(TestCase):
         tier = Tier.objects.create(name='role', thumbnail_sizes=[200], can_get_original=True)
         apiuser = ApiUser.objects.create(user=user, tier=tier)
 
-        with open(os.path.join(BASE_DIR, 'media', 'test', 'python.png'), errors='ignore') as f:
+        with open(os.path.join(BASE_DIR, 'media', 'test', 'python.png'), 'rb') as f:
             image_from_disk = File(f)
 
             image = Image.objects.create(name='Python', image=image_from_disk, owner=apiuser)
