@@ -10,7 +10,7 @@ class ApiUserTest(TestCase):
         thumbnail_sizes = [200]
 
         user = User.objects.create(username='username', password='password')
-        tier = Tier.objects.create(name='role', thumbnail_sizes=thumbnail_sizes, can_get_original=True)
+        tier = Tier.objects.create(name='tier', thumbnail_sizes=thumbnail_sizes, can_get_original=True)
         ApiUser.objects.create(user=user, tier=tier)
 
         self.assertEqual(ApiUser.objects.first().tier.thumbnail_sizes, f'{thumbnail_sizes}')

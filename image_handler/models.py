@@ -13,7 +13,7 @@ def upload_to(instance, filename):
 
 class Image(models.Model):
     name = models.CharField(max_length=50)
-    upload_date = models.DateTimeField(default=timezone.now())
+    upload_date = models.DateTimeField(default=timezone.now)
     owner = models.ForeignKey(ApiUser, on_delete=models.CASCADE)
 
     image = models.ImageField(upload_to=upload_to, max_length=255)
