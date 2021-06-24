@@ -12,7 +12,7 @@ def upload_to(instance, filename):
 
 
 class Image(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     upload_date = models.DateTimeField(default=timezone.now)
     owner = models.ForeignKey(ApiUser, on_delete=models.CASCADE)
 
@@ -22,4 +22,4 @@ class Image(models.Model):
         return self.__str__()
 
     def __str__(self):
-        return f'user {self.owner_id}-{self.name}'
+        return f'{self.owner.user.username}-{self.name}'
