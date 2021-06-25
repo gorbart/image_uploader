@@ -8,4 +8,5 @@ urlpatterns = [
     path('upload/', UploadImageView.as_view(), name='uploadimage'),
     path('list/', ListImagesView.as_view(), name='listimages'),
     path('link/', ImageLinkView.as_view(), name='imagelink'),
+    path('thumbnail/', ThumbnailLinkView.as_view(), name='thumbnaillink'),
 ]
