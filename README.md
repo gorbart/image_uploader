@@ -11,7 +11,11 @@ The project has been done using Django Rest Framework and a few other helping li
 Also, one can easily run the application using docker-compose. The only thing
 that needs to be done afterwards is creating a superuser. I left it out of the
 automatic stand-up as every user can (and should) use his own credentials as 
-superuser. To do this one should: <br>
+superuser. To get the application up and running one should: <br>
+- download project (git clone https://github.com/gorbart/image_uploader can be useful)
+- open project directory in cmd <br>
+- type in "docker-compose up --build" (of course having Docker installed and working
+  earlier is a must)<br>
 - open image_uploader_web_1's CLI <br>
-- type in "python manage.py createsuperuser" <br>
-  and go on with his credentials.
+- type in "python manage.py createsuperuser" and go on with his credentials <br>
+- use application's REST API with localhost:8000/api/(insert what you want to do).
