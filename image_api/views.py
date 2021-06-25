@@ -86,7 +86,7 @@ class ListImagesView(APIView):
     def get(self, request):
         apiuser = get_api_user(request)
 
-        images = [(image.name, image.upload_date) for image in apiuser.image_set.all()]
+        images = [(image.name, image.upload_time) for image in apiuser.image_set.all()]
 
         return Response(data={'images': images}, status=status.HTTP_200_OK)
 

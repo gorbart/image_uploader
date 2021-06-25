@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'rest_framework.authtoken',
     'django_apscheduler',
     'users',
@@ -159,5 +160,5 @@ REST_FRAMEWORK = {
 }
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
-APSCHEDULER_RUN_NOW_TIMEOUT = 25 
+APSCHEDULER_RUN_NOW_TIMEOUT = 25
 

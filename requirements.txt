@@ -26,11 +26,9 @@ requests==2.25.1
 six==1.16.0
 sqlparse==0.4.1
 texttable==1.6.3
-urllib3==1.26.5
 websocket-client==0.59.0
 
 djangorestframework~=3.12.4
 Pillow~=8.2.0
-celery~=3.1.26.post2
 APScheduler~=3.7.0
 django_apscheduler~=0.6.0
