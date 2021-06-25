@@ -1,12 +1,11 @@
 import os
-import urllib.request
 
 from django.contrib.auth.models import User
 from django.core.files import File
 from django.test import TestCase
 
 from image_handler.models import Image
-from image_uploader.settings import MEDIA_ROOT, BASE_DIR
+from image_uploader.settings import BASE_DIR
 from users.models import Tier, ApiUser
 
 

@@ -9,4 +9,5 @@ urlpatterns = [
     path('list/', ListImagesView.as_view(), name='listimages'),
     path('link/', ImageLinkView.as_view(), name='imagelink'),
     path('thumbnail/', ThumbnailLinkView.as_view(), name='thumbnaillink'),
+    path('expire/', ExpiringLinksView.as_view(), name='expiringlink'),
 ]

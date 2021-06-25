@@ -17,7 +17,8 @@ def upload_to(instance, filename):
 
 class Image(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    upload_date = models.DateTimeField(default=timezone.now)
+    upload_time = models.DateTimeField(default=timezone.now)
+    expiry_time = models.DateTimeField(null=True, blank=True)
     owner = models.ForeignKey(ApiUser, on_delete=models.CASCADE)
 
     image = models.ImageField(upload_to=upload_to, max_length=255)

@@ -5,14 +5,9 @@ from users.models import ApiUser, Tier
 
 
 class ImageSerializer(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField('get_image_url')
-
     class Meta:
         model = Image
-        fields = ('name', 'upload_date', 'owner', 'image', 'image_url')
-
-    def get_image_url(self, obj):
-        return obj.image.url
+        fields = ('name', 'upload_time', 'expiry_time', 'owner', 'image')
 
 
 class ApiUserSerializer(serializers.ModelSerializer):

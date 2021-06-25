@@ -1,7 +1,6 @@
 import io
 import os
 
-from django.conf.global_settings import MEDIA_ROOT
 from django.contrib.auth.models import User
 from django.core.files import File
 from django.test import SimpleTestCase

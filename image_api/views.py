@@ -1,7 +1,11 @@
+import os
+import uuid
 from io import BytesIO
 
 import PIL
+from django.core.files import File
 from django.core.files.images import ImageFile
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -15,6 +19,11 @@ POSSIBLE_IMAGE_FORMATS = ['jpg', 'png']
 IMAGE_NOT_FOUND_ERROR_MESSAGE = 'Image not found'
 WRONG_TIER_ERROR_MESSAGE = "Your account tier won't allow this operation"
 WRONG_FORMAT_ERROR_MESSAGE = 'Only possible image formats are: {}'.format(POSSIBLE_IMAGE_FORMATS)
+INVALID_EXPIRY_TIME_ERROR_MESSAGE = 'Expiry time should be from interval [300, 30000]'
+INTERNAL_SERVER_ERROR_MESSAGE = 'Internal server error'
+
+MIN_EXPIRY_TIME = 300
+MAX_EXPIRY_TIME = 30000
 
 
 def get_api_user(request):
@@ -131,8 +140,47 @@ class ThumbnailLinkView(APIView):
                     'image': ImageFile(blob, name=thumbnail_name + '.' + extension)}
 
             serializer = ImageSerializer(data=data)
-            serializer.is_valid()
+
+            if not serializer.is_valid():
+                return Response({'error': INTERNAL_SERVER_ERROR_MESSAGE}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
             serializer.save()
             return Response(data={'thumbnail': serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': IMAGE_NOT_FOUND_ERROR_MESSAGE}, status=status.HTTP_404_NOT_FOUND)
+
+
+class ExpiringLinksView(APIView):
+
+    def get(self, request):
+        apiuser = get_api_user(request)
+
+        if not apiuser.tier.can_generate_expiring_links:
+            return Response({'error': WRONG_TIER_ERROR_MESSAGE}, status=status.HTTP_403_FORBIDDEN)
+
+        expiry_time = int(request.query_params['expirytime'])
+
+        if not MIN_EXPIRY_TIME <= expiry_time <= MAX_EXPIRY_TIME:
+            return Response({'error': INVALID_EXPIRY_TIME_ERROR_MESSAGE}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        try:
+            image = apiuser.image_set.get(name=request.query_params['name'])
+        except Image.DoesNotExist:
+            image = None
+
+        if image:
+            image.pk = None
+            image.name = image.name + str(expiry_time) + 's' + str(uuid.uuid4())[:8]
+            image.upload_time = timezone.now()
+            image.expiry_time = timezone.now() + timezone.timedelta(seconds=expiry_time)
+
+            with open(image.image.file.name, 'rb') as f:
+                image_from_disk = File(f)
+                image.image = image_from_disk
+                image.save()
+
+                serializer = ImageSerializer(image)
+
+                return Response(data={'image': serializer.data}, status=status.HTTP_200_OK)
         else:
             return Response({'error': IMAGE_NOT_FOUND_ERROR_MESSAGE}, status=status.HTTP_404_NOT_FOUND)

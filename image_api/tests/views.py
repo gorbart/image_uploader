@@ -27,7 +27,8 @@ class ViewsTest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         thumbnail_sizes = '200, 400'
-        tier = Tier.objects.create(name='tier', thumbnail_sizes=thumbnail_sizes, can_get_original=True)
+        tier = Tier.objects.create(name='tier', thumbnail_sizes=thumbnail_sizes, can_get_original=True,
+                                   can_generate_expiring_links=True)
         self.apiuser = ApiUser.objects.create(user=user, tier=tier)
 
     def test_upload_image(self):
@@ -84,6 +85,13 @@ class ViewsTest(APITestCase):
         response = self.get_thumbnail()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(self.apiuser.image_set.all()), 2)
+
+    def test_get_expiring_link(self):
+        self.upload_image(PYTHON_PNG)
+
+        url = reverse('image_api:expiringlink')
+        response = self.client.get(url, {'name': IMAGE_NAME, 'expirytime': 300}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def get_thumbnail(self):
         url = reverse('image_api:thumbnaillink')
