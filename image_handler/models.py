@@ -1,14 +1,17 @@
 import os
 
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.utils import timezone
 
 from users.models import ApiUser
 
 
 def upload_to(instance, filename):
-    return os.path.join(str(instance.owner_id), str(instance.upload_date.year), str(instance.upload_date.month),
-                        str(instance.upload_date.day), filename)
+    extension = filename.split('.')[-1]
+    hashed_filename = hash(instance.owner.user.username) + hash(instance.upload_date) + hash(filename)
+    return os.path.join(str(hashed_filename) + '.' + extension)
 
 
 class Image(models.Model):
@@ -23,3 +26,8 @@ class Image(models.Model):
 
     def __str__(self):
         return f'{self.owner.user.username}-{self.name}'
+
+
+@receiver(pre_delete, sender=Image)
+def mymodel_delete(sender, instance, **kwargs):
+    instance.image.delete(False)
